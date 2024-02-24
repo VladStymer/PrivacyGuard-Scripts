@@ -1,0 +1,17 @@
+{
+    "hosts": [
+      {
+        "hostname": "hostname1",
+        "mac_address": "00:11:22:33:44:55"
+      },
+      {
+        "hostname": "hostname2",
+        "mac_address": "66:77:88:99:AA:BB"
+      },
+      {
+        "hostname": "hostname3",
+        "mac_address": "CC:DD:EE:FF:00:11"
+      }
+    ]
+  }
+  
