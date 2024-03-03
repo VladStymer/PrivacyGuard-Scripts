@@ -31,16 +31,20 @@ RANDOM_MAC=$(echo "$SELECTED_HOST" | jq -r '.mac_address')
 RANDOM_HOSTNAME=$(echo "$SELECTED_HOST" | jq -r '.hostname')
 
 # Apply the MAC address
-echo "Identifying active network interface..."
-INTERFACE=$(ip link | awk '/state UP/ {print $2}' | sed 's/://g' | head -n 1)
-if [ -z "$INTERFACE" ]; then
+echo "Identifying active network interfaces..."
+INTERFACES=$(ip link | awk '/state UP/ {print $2}' | sed 's/://g')
+
+if [ -z "$INTERFACES" ]; then
     echo "No active network interface found."
     exit 1
 fi
-echo "Updating MAC address for interface $INTERFACE..."
-sudo ip link set dev $INTERFACE down
-sudo macchanger --mac=$RANDOM_MAC $INTERFACE
-sudo ip link set dev $INTERFACE up
+
+for INTERFACE in $INTERFACES; do
+    echo "Updating MAC address for interface $INTERFACE..."
+    sudo ip link set dev $INTERFACE down
+    sudo macchanger --mac=$RANDOM_MAC $INTERFACE
+    sudo ip link set dev $INTERFACE up
+done
 
 # Change the hostname
 echo "Updating hostname to $RANDOM_HOSTNAME..."
